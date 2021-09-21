@@ -1,0 +1,56 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Transform": "AWS::Serverless-2016-10-31",
+  "Description": "An AWS Serverless Application that uses the ASP.NET Core framework running in Amazon Lambda.",
+  "Parameters": {},
+  "Conditions": {},
+  "Resources": {
+    "AspNetCoreFunction": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "PdfLambda::PdfLambda.LambdaEntryPoint::FunctionHandlerAsync",
+        "Runtime": "dotnetcore3.1",
+        "CodeUri": "",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Role": null,
+        "Policies": [
+          "AWSLambda_FullAccess"
+        ],
+        "Layers": [
+        "arn:aws:lambda:us-east-1:347599033421:layer:wkhtmltopdf-0_12_6:1",
+        "arn:aws:lambda:us-east-1:347599033421:layer:amazon_linux_fonts:1"
+        ],
+        "Environment": {
+            "Variables": {
+            "FONTCONFIG_PATH": "/opt/etc/fonts"
+          }
+         },
+        "Events": {
+          "ProxyResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/{proxy+}",
+              "Method": "ANY"
+            }
+          },
+          "RootResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/",
+              "Method": "ANY"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "ApiURL": {
+      "Description": "API endpoint URL for Prod environment",
+      "Value": {
+        "Fn::Sub": "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+      }
+    }
+  }
+}
