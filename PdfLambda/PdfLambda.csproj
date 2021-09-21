@@ -8,6 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- native assets excluded as we are using lambda layers instead -->
+    <PackageReference Include="AWSSDK.S3" Version="3.7.3.1" />
     <PackageReference Include="Haukcode.WkHtmlToPdfDotNet" Version="1.5.8" ExcludeAssets="native" />
     <PackageReference Include="Amazon.Lambda.AspNetCoreServer" Version="5.3.0" />
   </ItemGroup>
